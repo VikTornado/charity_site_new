@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Благодійна організація{% endblock %}</title>
+    <link href="{% static 'main/css/styles.css' %}" rel="stylesheet">
+</head>
+<body>
+{% if messages %}
+  <div class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+    <div class="pointer-events-auto w-full max-w-sm px-4">
+      {% for message in messages %}
+        <div class="flex items-start bg-white border-l-4 shadow-md rounded px-4 py-3 mb-4
+          {% if message.tags == 'success' %}
+            border-green-500
+          {% elif message.tags == 'error' %}
+            border-red-500
+          {% elif message.tags == 'warning' %}
+            border-yellow-500
+          {% else %}
+            border-blue-500
+          {% endif %}">
+          <svg class="w-6 h-6 mr-2 mt-1 flex-shrink-0
+            {% if message.tags == 'success' %}
+              text-green-600
+            {% elif message.tags == 'error' %}
+              text-red-600
+            {% elif message.tags == 'warning' %}
+              text-yellow-600
+            {% else %}
+              text-blue-600
+            {% endif %}" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M18 10A8 8 0 11..."></path>
+          </svg>
+          <div class="text-sm text-gray-800">{{ message }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <script>
+    setTimeout(() => {
+      const el = document.querySelector('.fixed.inset-0.z-50');
+      if (el) el.remove();
+    }, 5000);
+  </script>
+{% endif %}
+<header class="bg-white shadow mb-6 flex items-center justify-between px-4 py-4 container mx-auto">
+  <div class="flex items-center space-x-3">
+    <img src="{% static 'main/img/logo.svg' %}" alt="Logo" class="w-8 h-8">
+    <a href="{% url 'home' %}" class="text-xl font-bold text-gray-800">Благодійна організація</a>
+  </div>
+  <nav class="hidden md:flex space-x-4">
+    <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-600">Головна</a>
+    <a href="{% url 'news_list' %}" class="text-gray-700 hover:text-blue-600">Новини</a>
+    <a href="{% url 'gallery' %}" class="text-gray-700 hover:text-blue-600">Галерея</a>
+    <a href="{% url 'contact' %}" class="text-gray-700 hover:text-blue-600">Контакти</a>
+    <a href="{% url 'donate' %}" class="text-gray-700 hover:text-blue-600">Підтримати</a>
+  </nav>
+  <div class="hidden md:flex space-x-4">
+    {% if user.is_authenticated %}
+      {% if user.is_staff %}
+        <a href="/admin/" class="text-gray-700 hover:text-blue-600">Адмінка</a>
+      {% endif %}
+      <a href="{% url 'logout' %}" class="text-red-600">Вийти</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="text-gray-700 hover:text-blue-600">Вхід</a>
+      <a href="{% url 'register' %}" class="text-gray-700 hover:text-blue-600">Реєстрація</a>
+    {% endif %}
+  </div>
+  <div id="menuToggle" class="md:hidden flex items-center">
+    <button id="menuToggleBtn" class="md:hidden text-gray-700 focus:outline-none">
+      <svg id="burgerIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div id="mobileMenu" class="fixed inset-0 z-40 hidden md:hidden transition-opacity duration-300 h-full">
+  
+  <div class="relative w-full h-full bg-black bg-opacity-50" id="mobileOverlay">
+    <div id="mobilePanel" class="absolute left-0 top-0 bg-white w-full h-full shadow-md px-4 py-6 transform -translate-x-full transition-transform duration-300">
+      <span id="closeIcon" class="text-2xl font-bold cursor-pointer absolute top-4 right-4 z-50 text-gray-700">&times;</span>
+      <nav class="flex flex-col px-4 py-4 space-y-2">
+        <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-600">Головна</a>
+        <a href="{% url 'news_list' %}" class="text-gray-700 hover:text-blue-600">Новини</a>
+        <a href="{% url 'gallery' %}" class="text-gray-700 hover:text-blue-600">Галерея</a>
+        <a href="{% url 'donate' %}" class="text-gray-700 hover:text-blue-600">Підтримати</a>
+        {% if user.is_authenticated %}
+          {% if user.is_staff %}
+            <a href="/admin/" class="text-gray-700 hover:text-blue-600">Адмінка</a>
+          {% endif %}
+          <a href="{% url 'logout' %}" class="text-red-600">Вийти</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="text-gray-700 hover:text-blue-600">Вхід</a>
+          <a href="{% url 'register' %}" class="text-gray-700 hover:text-blue-600">Реєстрація</a>
+        {% endif %}
+        <a href="javascript:history.back()" class="text-gray-600 hover:text-blue-700 mt-4 block">← Назад</a>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<main class="container mx-auto px-4 py-6">
+  {% block content %}
+  {% endblock %}
+</main>
+<!-- Модальне вікно для перегляду зображень з анімацією -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 transition-opacity duration-300 ease-in-out">
+  <button id="prevBtn" class="absolute left-4 text-white text-4xl font-bold px-3 py-2 hover:text-gray-300">&#10094;</button>
+  <img id="modalImage" src="" alt="Large view" class="max-w-full max-h-screen rounded shadow-xl transform scale-95 transition-transform duration-300 ease-in-out">
+  <button id="nextBtn" class="absolute right-4 text-white text-4xl font-bold px-3 py-2 hover:text-gray-300">&#10095;</button>
+</div>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const images = Array.from(document.querySelectorAll(".gallery-thumb"));
+    let currentIndex = -1;
+
+    function showImage(index) {
+      if (index >= 0 && index < images.length) {
+        currentIndex = index;
+        modalImg.src = images[index].src;
+        modal.classList.remove("hidden");
+        modal.classList.add("flex", "opacity-100");
+        modalImg.classList.remove("scale-95");
+        modalImg.classList.add("scale-100");
+      }
+    }
+
+    images.forEach((img, index) => {
+      img.addEventListener("click", () => {
+        showImage(index);
+      });
+    });
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal || e.target === modalImg) {
+        modal.classList.remove("opacity-100");
+        modalImg.classList.remove("scale-100");
+        modalImg.classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+          modalImg.src = "";
+          currentIndex = -1;
+        }, 300);
+      }
+    });
+
+    prevBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (currentIndex > 0) showImage(currentIndex - 1);
+    });
+
+    nextBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (currentIndex < images.length - 1) showImage(currentIndex + 1);
+    });
+
+    const toggleBtn = document.getElementById("menuToggleBtn");
+    const burgerIcon = document.getElementById("burgerIcon");
+    const closeIcon = document.getElementById("closeIcon");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const mobilePanel = document.getElementById("mobilePanel");
+    const mobileOverlay = document.getElementById("mobileOverlay");
+
+    function openMobileMenu() {
+      mobileMenu.classList.remove("hidden");
+      mobilePanel.classList.remove("-translate-x-full");
+      burgerIcon.classList.add("hidden");
+      closeIcon.classList.remove("hidden");
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.add("hidden");
+      mobilePanel.classList.add("-translate-x-full");
+      burgerIcon.classList.remove("hidden");
+      closeIcon.classList.add("hidden");
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      const isOpen = !mobileMenu.classList.contains("hidden");
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    });
+
+    closeIcon.addEventListener("click", closeMobileMenu);
+
+    mobileMenu.addEventListener("click", (e) => {
+      if (e.target === mobileOverlay) {
+        closeMobileMenu();
+      }
+    });
+  });
+</script>
+</html>

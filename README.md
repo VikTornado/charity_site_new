@@ -1,0 +1,1 @@
+echo "# Charity Site" > README.md

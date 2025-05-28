@@ -1,0 +1,24 @@
+<!-- templates/main/gallery_upload.html -->
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="max-w-xl mx-auto p-6 bg-white shadow rounded">
+  <h2 class="text-2xl font-bold mb-4">Додати фото до галереї</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-4">
+      <label class="block text-gray-700">Назва:</label>
+      <input type="text" name="title" class="w-full border rounded px-3 py-2" required>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700">Зображення:</label>
+      <input type="file" name="image" class="w-full border rounded px-3 py-2" required>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700">Посилання на відео (необов'язково):</label>
+      <input type="url" name="video_url" class="w-full border rounded px-3 py-2">
+    </div>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Завантажити</button>
+  </form>
+</div>
+{% endblock %}

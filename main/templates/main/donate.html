@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+{% block content %}
+  <h1 class="text-2xl font-bold mb-4">Підтримати нас</h1>
+  <p class="mb-4">Ваша підтримка дозволяє нам допомагати ще більше!</p>
+
+  <div class="bg-white shadow p-6 rounded mb-6">
+    <h2 class="text-xl font-semibold mb-2">Реквізити:</h2>
+    <p>UAH: 5375 XXXX XXXX XXXX (Monobank)</p>
+    <p>IBAN: UAxxxxxxxxxxxxxxxxxxxxxx</p>
+  </div>
+
+  <a href="https://send.monobank.ua/jar/..." target="_blank"
+     class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+    Донат через Monobank
+  </a>
+{% endblock %}
