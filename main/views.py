@@ -92,3 +92,7 @@ def contact_view(request):
     else:
         form = ContactForm()
     return render(request, 'main/contact.html', {'form': form})
+
+def home(request):
+    news_items = list(News.objects.order_by('-created_at')[:3])
+    return render(request, 'main/home.html', {'news_items': news_items})

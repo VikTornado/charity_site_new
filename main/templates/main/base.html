@@ -3,7 +3,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Благодійна організація{% endblock %}</title>
+    <title>{% block title %}Рівний-рівному{% endblock %}</title>
     <link href="{% static 'main/css/styles.css' %}" rel="stylesheet">
 </head>
 <body>
@@ -45,12 +45,12 @@
     }, 5000);
   </script>
 {% endif %}
-<header class="bg-white shadow mb-6 flex items-center justify-between px-4 py-4 container mx-auto">
+<header class="w-full bg-white shadow mb-6 flex items-center justify-between px-4 py-4">
   <div class="flex items-center space-x-3">
     <img src="{% static 'main/img/logo.svg' %}" alt="Logo" class="w-8 h-8">
-    <a href="{% url 'home' %}" class="text-xl font-bold text-gray-800">Благодійна організація</a>
+    <a href="{% url 'home' %}" class="text-xl font-bold text-gray-800">Рівний-рівному</a>
   </div>
-  <nav class="hidden md:flex space-x-4">
+  <nav class="hidden md:flex space-x-4 bg-blue-700">
     <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-600">Головна</a>
     <a href="{% url 'news_list' %}" class="text-gray-700 hover:text-blue-600">Новини</a>
     <a href="{% url 'gallery' %}" class="text-gray-700 hover:text-blue-600">Галерея</a>
@@ -113,6 +113,9 @@
   <img id="modalImage" src="" alt="Large view" class="max-w-full max-h-screen rounded shadow-xl transform scale-95 transition-transform duration-300 ease-in-out">
   <button id="nextBtn" class="absolute right-4 text-white text-4xl font-bold px-3 py-2 hover:text-gray-300">&#10095;</button>
 </div>
+{% if debug %}
+  <script src="http://localhost:8000/__reload__/reload.js"></script>
+{% endif %}
 </body>
 <script>
   document.addEventListener("DOMContentLoaded", function () {

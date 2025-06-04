@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import home, news_list, news_detail, gallery_view, donate_view, contact_view  # ← додай contact_view
-
+from django.urls import path, include
 
 urlpatterns = [
     path('', views.home, name='home'),  # ← це важливо!
@@ -14,5 +14,6 @@ path('donate/', views.donate_view, name='donate'),
 path('gallery/', views.gallery_view, name='gallery'),
 path('gallery/upload/', views.upload_gallery_item, name='upload_gallery_item'),
 path('contact/', contact_view, name='contact'),  # ← оця лінія викликає помилку, якщо імпорт не зроблено
+path("__reload__/", include("django_browser_reload.urls")),
 
 ]

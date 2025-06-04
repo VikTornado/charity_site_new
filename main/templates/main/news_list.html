@@ -2,18 +2,18 @@
 {% block content %}
 <section class="px-4 py-8 max-w-7xl mx-auto">
   <h1 class="text-2xl font-bold mb-6 text-gray-800">Новини</h1>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="flex flex-wrap gap-6 justify-center items-stretch">
     {% for item in news_items %}
-      <div class="border rounded shadow hover:shadow-md p-4 bg-white">
+      <a href="{% url 'news_detail' slug=item.slug %}" class="min-h-[460px] h-auto w-[300px] border rounded shadow hover:shadow-md bg-white overflow-hidden flex flex-col">
         {% if item.image %}
-  <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-40 object-cover mb-4 rounded">
-{% endif %}
-        <h2 class="text-lg font-bold text-blue-700 mb-2">
-          <a href="{% url 'news_detail' slug=item.slug %}">{{ item.title }}</a>
-        </h2>
-        <p class="text-sm text-gray-600">{{ item.created_at|date:"d.m.Y H:i" }}</p>
-        <p class="text-gray-700 mt-2">{{ item.content|truncatewords:25 }}</p>
-      </div>
+          <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full aspect-video object-cover">
+        {% endif %}
+        <div class="p-4 flex flex-col flex-grow">
+          <h2 class="text-lg font-bold text-blue-700 mb-2">{{ item.title }}</h2>
+          <p class="text-sm text-gray-600">{{ item.created_at|date:"d.m.Y H:i" }}</p>
+          <p class="text-gray-700 mt-2 flex-grow">{{ item.content|truncatewords:25|safe }}</p>
+        </div>
+      </a>
     {% empty %}
       <p>Новин ще немає.</p>
     {% endfor %}
